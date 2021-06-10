@@ -21,9 +21,9 @@ function App() {
 
   return (
     <>
-      <h3>Current Count = {count}</h3>
+      {/* <h3>Current Count = {count}</h3>
       <button onClick={() => dispatch({type: "increment", payload: 3})}>Increment Count by 3</button>
-      <button onClick={() => dispatch({type: "decrement", payload: 1})}>Decrememnt by 1</button>
+      <button onClick={() => dispatch({type: "decrement", payload: 1})}>Decrememnt by 1</button> */}
       <Nav />
       <Switch>
         <Route exact path="/login">

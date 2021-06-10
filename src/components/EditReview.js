@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
 
 const StyledForm = styled.form`
   position: relative;
@@ -27,7 +27,7 @@ const StyledInput = styled.input`
   box-sizing: border-box;
 `;
 
-function NewReview() {
+function EditReview({ editId }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [overallRating, setOverallRating] = useState(0);
@@ -39,11 +39,11 @@ function NewReview() {
     (state) => state.boardGameReducer.selectedBoardGame.id
   );
 
-  function handleNewReview(e) {
+  function handleEditReview(e) {
     e.preventDefault();
 
-    fetch("http://localhost:3000/api/v1/reviews", {
-      method: "POST",
+    fetch(`http://localhost:3000/api/v1/reviews/${editId}`, {
+      method: "PATCH",
       headers: {
         "content-type": "application/json",
         Authorization: `Bearer ${localStorage.token}`,
@@ -67,8 +67,7 @@ function NewReview() {
               elem === "overall_rating" ||
               elem === "replayability" ||
               elem === "first_time_difficulty" ||
-              elem === "user_id" || 
-              elem === "title" || 
+              elem === "title" ||
               elem === "description"
           )
         ) {
@@ -89,8 +88,8 @@ function NewReview() {
   }
 
   return (
-    <StyledForm onSubmit={handleNewReview}>
-      <StyledLabel style={{ fontWeight: "bolder" }}>New Review</StyledLabel>
+    <StyledForm onSubmit={handleEditReview}>
+      <StyledLabel style={{ fontWeight: "bolder" }}>Edit Review</StyledLabel>
       <br />
       <br />
       <StyledLabel>Title</StyledLabel>
@@ -125,10 +124,10 @@ function NewReview() {
         onChange={(e) => setFirstTimeDifficulty(e.target.value)}
       />
       <StyledInput as="button" type="submit">
-        Submit New Review
+        Submit Edited Review
       </StyledInput>
     </StyledForm>
   );
 }
 
-export default NewReview;
+export default EditReview;

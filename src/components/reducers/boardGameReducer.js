@@ -15,6 +15,21 @@ let boardGameReducer = (state = initialState, action) => {
             return {
                 ...state, selectedBoardGame: action.payload
             }
+        case "updateBoardGame":
+            const updatedBoardGames = state.boardGames.map(boardGame => {
+                if(boardGame.id === action.payload.id){
+                    return action.payload 
+                } else {
+                    return boardGame
+                }
+            })
+            return {
+                ...state, boardGames: updatedBoardGames, selectedBoardGame: action.payload
+            }
+        case "addBoardGame":
+            return {
+                ...state, boardGames: [...state.boardGames, action.payload]
+            }
         default:
             return state
     }

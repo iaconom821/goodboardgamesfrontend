@@ -57,8 +57,8 @@ function SignUp() {
           alert("Invalid Field")
           return null 
         }
-        dispatch({type: "setUser", payload: resp.user.id })
-        localStorage.userId = resp.user.id
+        dispatch({type: "setUser", payload: resp.user })
+        localStorage.userId = resp.user
         localStorage.token = resp.token});
   }
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
-import styled from 'styled-components'
+import { useDispatch } from 'react-redux'
+import styled from "styled-components";
 
 const StyledForm = styled.form`
   position: relative;
@@ -9,11 +10,11 @@ const StyledForm = styled.form`
   justify-content: center;
   padding: 5px;
   width: fit-content;
-`
+`;
 
 const StyledLabel = styled.label`
-  color: #39FF14;
-  `
+  color: #39ff14;
+`;
 
 const StyledInput = styled.input`
   display: block;
@@ -25,17 +26,17 @@ const StyledInput = styled.input`
   text-align-last: center;
   width: 100%;
   box-sizing: border-box;
-  `
+`;
 
 function NewBoardGame() {
-  const [title, setTitle] = useState('');
-  const [manufacturer, setManufacturer] = useState('');
+  const [title, setTitle] = useState("");
+  const [manufacturer, setManufacturer] = useState("");
   const [description, setDescription] = useState("");
-  const [upcCode, setUpcCode] = useState('')
+  const [upcCode, setUpcCode] = useState("");
 
-  const history = useHistory()
+  const history = useHistory();
 
-  
+  const dispatch = useDispatch();
 
   function handleNewBoardGame(e) {
     e.preventDefault();
@@ -49,24 +50,27 @@ function NewBoardGame() {
       body: JSON.stringify({
         title: title,
         manufacturer: manufacturer,
-        description: description
+        description: description,
+        upc_code: upcCode,
       }),
     })
       .then((res) => res.json())
-      .then((text) => {
-        //console.log(text)
-        history.push(`/boardgames/${text.boardgame.id}`)
+      .then((newBoardGame) => {
+        console.log(newBoardGame);
+        dispatch({type: "addBoardGame", payload: newBoardGame})
+        //history.push(`/boardgames/${text.boardgame.id}`)
       });
   }
 
-  if(!localStorage.token){
-    return <h2>Please Log In or Sign Up</h2>
+  if (!localStorage.token) {
+    return <h2>Please Log In or Sign Up</h2>;
   }
 
   return (
     <StyledForm onSubmit={handleNewBoardGame}>
-      <StyledLabel style={{fontWeight: "bolder"}}>New Boardgame</StyledLabel><br/>
-      <br/>
+      <StyledLabel style={{ fontWeight: "bolder" }}>New Boardgame</StyledLabel>
+      <br />
+      <br />
       <StyledLabel>Title</StyledLabel>
       <StyledInput
         type="text"
@@ -87,7 +91,15 @@ function NewBoardGame() {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
-      <StyledInput as='button' type="submit">Submit New Game</StyledInput>
+      <StyledLabel>UPC Code</StyledLabel>
+      <StyledInput
+        type="text"
+        value={upcCode}
+        onChange={(e) => setUpcCode(e.target.value)}
+      />
+      <StyledInput as="button" type="submit">
+        Submit New Game
+      </StyledInput>
     </StyledForm>
   );
 }
