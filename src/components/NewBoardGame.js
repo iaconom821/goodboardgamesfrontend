@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import styled from 'styled-components'
 
@@ -30,110 +30,66 @@ const StyledInput = styled.input`
 function NewBoardGame() {
   const [title, setTitle] = useState('');
   const [manufacturer, setManufacturer] = useState('');
-  const [fieldId, setFieldId] = useState("");
-  const [fields, setFields] = useState([]);
-  
-  
-
-  console.log()
+  const [description, setDescription] = useState("");
+  const [upcCode, setUpcCode] = useState('')
 
   const history = useHistory()
 
-  function handleNewGame(e) {
+  
+
+  function handleNewBoardGame(e) {
     e.preventDefault();
 
-    fetch("http://localhost:3000/api/v1/games", {
+    fetch("http://localhost:3000/api/v1/boardgames", {
       method: "POST",
       headers: {
         "content-type": "application/json",
         Authorization: `Bearer ${localStorage.token}`,
       },
       body: JSON.stringify({
-        price: price,
-        start_time: startTime,
-        end_time: endTime,
-        field_id: parseInt(fieldId),
-        player_id: `${localStorage.userId}`,
-        recommended_skill: skill
+        title: title,
+        manufacturer: manufacturer,
+        description: description
       }),
     })
       .then((res) => res.json())
       .then((text) => {
         //console.log(text)
-        history.push(`/fields/${text.field.id}`)
+        history.push(`/boardgames/${text.boardgame.id}`)
       });
   }
 
-  let fieldOptions = [];
-  if (fields[0]) {
-    fieldOptions = fields.map((field) => {
-      return (
-        <option className='fieldid' key={field.id} value={field.id}>
-          {field.name}
-        </option>
-      );
-    });
-  }
-
-  useEffect(() => {
-    fetch(`http://localhost:3000/api/v1/fields/`, {
-      headers: { Authorization: `Bearer ${localStorage.token}` },
-    })
-      .then((r) => r.json())
-      .then((games) => {
-        if(!localStorage.token){
-          return null
-        }
-        setFields(games)
-        if(!games[0]){
-          return null
-        }
-        setFieldId(games[0].id)
-      });
-  }, []);
-
-  if(!localStorage.userId){
+  if(!localStorage.token){
     return <h2>Please Log In or Sign Up</h2>
   }
 
   return (
-    <StyledForm onSubmit={handleNewGame}>
-      <StyledLabel style={{fontWeight: "bolder"}}>New Game</StyledLabel><br/>
+    <StyledForm onSubmit={handleNewBoardGame}>
+      <StyledLabel style={{fontWeight: "bolder"}}>New Boardgame</StyledLabel><br/>
       <br/>
-      <StyledLabel>Fields</StyledLabel>
-      <StyledInput as='select' onChange={(e) => setFieldId(e.target.value)}>
-        {fields ? fieldOptions : null}
-      </StyledInput>
-      <StyledLabel>Start Time</StyledLabel>
+      <StyledLabel>Title</StyledLabel>
       <StyledInput
-        type="datetime-local"
-        name="start-time"
-        value={startTime}
-        onChange={(e) => setStartTime(e.target.value.toString())}
+        type="text"
+        name="title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
       />
-      <StyledLabel>End Time</StyledLabel>
+      <StyledLabel>Manufacturer</StyledLabel>
       <StyledInput
-        type="datetime-local"
-        name="end-time"
-        value={endTime}
-        onChange={(e) => setEndTime(e.target.value.toString())}
+        type="text"
+        name="manufacturer"
+        value={manufacturer}
+        onChange={(e) => setManufacturer(e.target.value)}
       />
-      <StyledLabel>Recomended Skill</StyledLabel>
+      <StyledLabel>Description</StyledLabel>
       <StyledInput
-        type="number"
-        value={skill}
-        onChange={(e) => setSkill(e.target.value)}
-      />
-      <StyledLabel>Price</StyledLabel>
-      <StyledInput
-        type="number"
-        step="0.01"
-        value={price}
-        onChange={(e) => setPrice(e.target.value)}
+        type="text"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
       />
       <StyledInput as='button' type="submit">Submit New Game</StyledInput>
     </StyledForm>
   );
 }
 
-export default NewGame;
+export default NewBoardGame;

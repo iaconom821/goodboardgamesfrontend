@@ -8,6 +8,7 @@ import BoardGameList from './components/BoardGameList.js'
 import BoardGameShow from './components/BoardGameShow.js'
 import UserList from './components/UserList.js'
 import UserShow from './components/UserShow.js'
+import NewBoardGame from './components/NewBoardGame';
 
 
 
@@ -33,6 +34,9 @@ function App() {
         </Route>
         <Route exact path="/boardgames">
           <BoardGameList />
+        </Route>
+        <Route exact path="/boardgames/new">
+          <NewBoardGame />
         </Route>
         <Route exact path="/boardgames/:id">
           <BoardGameShow />
