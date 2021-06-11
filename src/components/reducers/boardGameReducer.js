@@ -7,9 +7,8 @@ let boardGameReducer = (state = initialState, action) => {
                 ...state, boardGames: action.payload
             }
         case "setSelectedBoardGame":
-            const selectBoardGame = state.boardGames.find(boardGame => boardGame.id === action.payload)
             return {
-                ...state, selectedBoardGame: selectBoardGame
+                ...state, selectedBoardGame: action.payload
             }
         case "setSelectedBoardGameFromFetch":
             return {

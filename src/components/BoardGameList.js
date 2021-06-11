@@ -17,7 +17,7 @@ function BoardGameList() {
           dispatch({ type: "setBoardGames", payload: boardGameList });
         });
       }
-  },);
+  },[dispatch, boardGames]);
 
   if (!boardGames[0]) {
     return <h2>Loading</h2>;

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
+import { useHistory } from 'react-router-dom'
 
 const StyledForm = styled.form`
   position: relative;
@@ -30,9 +31,8 @@ function Login() {
   // Login Logic
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  //const history = useHistory();
+  const history = useHistory();
   const dispatch = useDispatch()
-  let jwt_token = localStorage.getItem("token");
 
   function handleLogin(e) {
     e.preventDefault();
@@ -40,7 +40,6 @@ function Login() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `bearer ${jwt_token}`,
       },
       body: JSON.stringify({
         username: username,
@@ -54,9 +53,10 @@ function Login() {
           return null
         }
         localStorage.token = userInfo.token;
-        localStorage.setItem(`userId`, `${userInfo.user}`);
+        localStorage.userId = userInfo.user.id;
+        userInfo.user.token = userInfo.token;
         dispatch({type: "setUser", payload: userInfo.user})
-        //history.push("/boardgames");
+        history.push("/boardgames");
       });
   }
 

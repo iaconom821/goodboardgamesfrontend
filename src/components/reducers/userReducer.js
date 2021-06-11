@@ -1,18 +1,14 @@
-let initialState = { user: {id: 0,
-    name:"",
-    username:"",
-    email:"",
-    password_digest:"",
-    profile_picture:"",
-    created_at:"",
-    updated_at:""}, users: [], selectedUser: null };
+let initialState = { user: null, users: [], selectedUser: null, token: null};
 
 let userReducer = (state = initialState, action) => {
   switch (action.type) {
     case "setUser":
+        console.log(action.payload)
       return {
         ...state,
         user: action.payload,
+        token: action.payload.token,
+        selectedUser: action.payload
       };
     case "setUsers":
       return {
@@ -31,6 +27,23 @@ let userReducer = (state = initialState, action) => {
       return {
         ...state,
         selectedUser: action.payload,
+      };
+    case "addToOwnedGames":
+        return {
+            ...state,
+            user: action.payload.user,
+            users: state.users.map(user => {
+                if(user.id === action.payload.user.id){
+                    return action.payload.user
+                } else {
+                    return user 
+                }
+            }),
+            selectedUser: action.payload.user 
+        }
+    case "logout":
+      return {
+        ...state, ...initialState
       };
     default:
       return state;

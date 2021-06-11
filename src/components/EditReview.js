@@ -34,7 +34,7 @@ function EditReview({ editId }) {
   const [replayability, setReplayability] = useState(0);
   const [firstTimeDifficulty, setFirstTimeDifficulty] = useState(0);
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.userReducer.user);
+  const user = useSelector((state) => state.userReducer.user.id);
   const boardgame = useSelector(
     (state) => state.boardGameReducer.selectedBoardGame.id
   );
@@ -66,9 +66,7 @@ function EditReview({ editId }) {
             (elem) =>
               elem === "overall_rating" ||
               elem === "replayability" ||
-              elem === "first_time_difficulty" ||
-              elem === "title" ||
-              elem === "description"
+              elem === "first_time_difficulty"
           )
         ) {
           const userMessage = validations

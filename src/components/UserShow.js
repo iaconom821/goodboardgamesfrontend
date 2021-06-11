@@ -1,10 +1,10 @@
 import { useSelector, useDispatch } from "react-redux"
-import { useParams } from "react-router-dom"
+import { useParams, Link } from "react-router-dom"
  
 
 function UserShow() {
-    // GET Field Logic
     const user = useSelector(state => state.userReducer.selectedUser)
+    const loggedInUser = useSelector(state => state.userReducer.user)
     const dispatch = useDispatch()
     const {id} = useParams()
 
@@ -21,11 +21,23 @@ function UserShow() {
 
         return <h2>Loading</h2>
     }
+    if(parseInt(user.id) !== parseInt(id)){
+        dispatch({type: "setSelectedUser", payload: loggedInUser})
+    }
+
+    let userBoardgamesLinks = []
+
+    if(user.owned_games[0]){
+        userBoardgamesLinks = user.owned_games.map(game => {
+            return <Link key={game.id} to={location => {location.pathname = `/boardgames/${game.id}`; dispatch({type: "setSelectedBoardGame", payload: game})}}>{game.title}</Link>
+        })
+    }
 
     
     return (
         <div>
             <p>{user.name} {user.username} {user.email}</p>
+            { user.owned_games[0] ? userBoardgamesLinks : null }
         </div>
     )
 

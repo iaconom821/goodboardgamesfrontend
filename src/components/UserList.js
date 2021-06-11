@@ -1,10 +1,11 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 function UserList() {
   // GET Field Logic
   const users = useSelector((state) => state.userReducer.users);
+  const user = useSelector((state) => state.userReducer.user)
 
   const dispatch = useDispatch();
 
@@ -15,6 +16,7 @@ function UserList() {
       })
         .then((res) => res.json())
         .then((userList) => {
+            console.log(userList)
           dispatch({ type: "setUsers", payload: userList });
         });
     }

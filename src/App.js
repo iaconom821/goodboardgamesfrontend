@@ -1,5 +1,5 @@
 import './App.css';
-import { Switch, Route } from "react-router-dom"
+import { Switch, Route, Redirect } from "react-router-dom"
 import { useSelector, useDispatch } from 'react-redux'
 import Nav from './components/Nav';
 import Login from "./components/Login.js"
@@ -16,7 +16,28 @@ import NewBoardGame from './components/NewBoardGame';
 function App() {
 
   const count = useSelector(state => state.countReducer.count)
-  
+
+  const user = useSelector(state => state.userReducer.user)
+
+  if(!user){
+    fetch(`http://localhost:3000/api/v1/users/${localStorage.userId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.token}`,
+        "Content-Type": "application/json",
+      }
+    })
+      .then((res) => res.json())
+      .then((resp) => {
+        if(!resp.id){
+          dispatch({type: "setUser", payload: {id: 0}})
+          return null
+        }
+        resp.token = localStorage.token 
+        dispatch({type: "setUser", payload: resp })
+        localStorage.userId = resp.id});
+  }
+  const token = useSelector(state => state.userReducer.token)
+  console.log(token)
   const dispatch = useDispatch()
 
   return (
@@ -42,10 +63,10 @@ function App() {
           <BoardGameShow />
         </Route>
         <Route exact path="/users">
-          <UserList />
+        {!token ? <Redirect to="/login" /> : <UserList />}
         </Route>
         <Route exact path="/users/:id">
-          <UserShow />
+        {!token ? <Redirect to="/login" /> : <UserShow />}
         </Route>
       </Switch>
     </>

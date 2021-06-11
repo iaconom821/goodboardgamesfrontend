@@ -16,7 +16,11 @@ const StyledLink = styled(Link)`
 
 function Nav() {
   const dispatch = useDispatch();
-  const user = useSelector(state => state.userReducer.user.id)
+  const user = useSelector((state) => state.userReducer.user);
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <div>
@@ -24,18 +28,12 @@ function Nav() {
       <StyledLink to="/login">Login</StyledLink>
       <StyledLink to="/boardgames">All Boardgames</StyledLink>
       <StyledLink to="/users">All Users</StyledLink>
-      {/* <StyledLink
-        to={(location) => {
-          location = `/users/${user.id}`;
-          dispatch({ type: "setSelectedUser", payload: localStorage.userId });
-        }}
-      >
-        My Profile
-      </StyledLink> */}
+      <StyledLink to={`/users/${user.id}`}>My Profile</StyledLink>
       <StyledLink
         to="/login"
         onClick={() => {
-          localStorage.clear();
+          localStorage.clear()
+          dispatch({type: "logout"});
         }}
       >
         Log Out

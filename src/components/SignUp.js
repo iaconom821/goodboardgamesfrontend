@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from 'styled-components'
 import { useDispatch } from "react-redux"
+import { useHistory } from "react-router-dom"
 
 const StyledForm = styled.form`
   position: relative;
@@ -31,16 +32,16 @@ function SignUp() {
   const [email, setEmail] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
 
-  let jwt_token = localStorage.getItem("token");
 
   const dispatch = useDispatch()
+
+  const history = useHistory()
 
   function signUp(e) {
     e.preventDefault();
     fetch("http://localhost:3000/api/v1/users", {
       method: "POST",
       headers: {
-        Authorization: `bearer ${jwt_token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -57,9 +58,12 @@ function SignUp() {
           alert("Invalid Field")
           return null 
         }
+        localStorage.userId = resp.user.id
+        localStorage.token = resp.token
+        resp.user.token = resp.token 
         dispatch({type: "setUser", payload: resp.user })
-        localStorage.userId = resp.user
-        localStorage.token = resp.token});
+        history.push(`/users/${resp.user.id}`)
+    });
   }
 
   return (
