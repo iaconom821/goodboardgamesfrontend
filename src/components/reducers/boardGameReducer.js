@@ -10,6 +10,11 @@ let boardGameReducer = (state = initialState, action) => {
             return {
                 ...state, selectedBoardGame: action.payload
             }
+        case "setSelectedBoardGameFromUser":
+            const userClickedBoardGame = state.boardGames.find(boardgame => parseInt(boardgame.id) === parseInt(action.payload))
+            return {
+                ...state, selectedBoardGame: userClickedBoardGame
+            }
         case "setSelectedBoardGameFromFetch":
             return {
                 ...state, selectedBoardGame: action.payload

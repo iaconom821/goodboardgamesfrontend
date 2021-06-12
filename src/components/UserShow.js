@@ -29,7 +29,7 @@ function UserShow() {
 
     if(user.owned_games[0]){
         userBoardgamesLinks = user.owned_games.map(game => {
-            return <Link key={game.id} to={location => {location.pathname = `/boardgames/${game.id}`; dispatch({type: "setSelectedBoardGame", payload: game})}}>{game.title}</Link>
+            return <Link key={game.id} to={location => {location.pathname = `/boardgames/${game.id}`; dispatch({type: "setSelectedBoardGameFromUser", payload: game.id})}}>{game.title}</Link>
         })
     }
 
