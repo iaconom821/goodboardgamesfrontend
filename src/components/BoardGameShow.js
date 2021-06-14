@@ -72,6 +72,10 @@ function BoardGameShow() {
       });
   }
 
+  if(parseInt(boardGame.id) !== parseInt(id)){
+      dispatch({type: "setSelectedBoardGameFromIdOnly", payload: id})
+  }
+
   return (
     <div>
       <h4>
