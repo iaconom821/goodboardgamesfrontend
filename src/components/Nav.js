@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 
+
 const StyledLink = styled(Link)`
   padding: 4px;
   margin: 3px;
@@ -24,6 +25,7 @@ function Nav() {
 
   return (
     <div>
+        <img style={{backgroundColor: "#FCFCD4", width: "62vh", height: "18vh"}} src="" alt="goodboardgames" />
       <StyledLink to="/signup">Sign Up</StyledLink>
       <StyledLink to="/login">Login</StyledLink>
       <StyledLink to="/boardgames">All Boardgames</StyledLink>

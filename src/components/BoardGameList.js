@@ -1,6 +1,9 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import Card from "react-bootstrap/Card";
+import CardDeck from "react-bootstrap/CardDeck";
+import styled from "styled-components"
 
 function BoardGameList() {
   // GET Field Logic
@@ -10,14 +13,14 @@ function BoardGameList() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-      if(!boardGames[0]) {
-        fetch("http://localhost:3000/api/v1/boardgames")
+    if (!boardGames[0]) {
+      fetch("http://localhost:3000/api/v1/boardgames")
         .then((res) => res.json())
         .then((boardGameList) => {
           dispatch({ type: "setBoardGames", payload: boardGameList });
         });
-      }
-  },[dispatch, boardGames]);
+    }
+  }, [dispatch, boardGames]);
 
   if (!boardGames[0]) {
     return <h2>Loading</h2>;
@@ -33,17 +36,24 @@ function BoardGameList() {
 
   const boardGameLinks = searchBoardGames.map((boardGame) => {
     return (
-      <Fragment key={boardGame.id}>
-        <Link
-          to={(location) => {
-            location.pathname = `/boardgames/${boardGame.id}`;
-            dispatch({ type: "setSelectedBoardGame", payload: boardGame });
-          }}
-        >
-          {boardGame.title} {boardGame.manufacturer} {boardGame.description}
-        </Link>
-        <br />
-      </Fragment>
+      <Card key={boardGame.id} style={{ width: "15vw", margin: "8px" }}>
+          <div style={{width: "15vw", height: "20vw"}}>
+                <Card.Img style={{maxWidth: "100%", maxHeight: "90%"}} src={`${boardGame.image}`} />
+          </div>
+        <Card.Body>
+            <div style={{height: "7vw"}}>
+                <Card.Title style={{fontSize: "1rem"}}>{boardGame.title}</Card.Title>
+            </div>
+          <Link
+            to={(location) => {
+              location.pathname = `/boardgames/${boardGame.id}`;
+              dispatch({ type: "setSelectedBoardGame", payload: boardGame });
+            }}
+          >
+            <button>More Info</button>
+          </Link>
+        </Card.Body>
+      </Card>
     );
   });
 
@@ -60,7 +70,7 @@ function BoardGameList() {
         Add A Boardgame
       </Link>
       <br />
-      {boardGameLinks}
+      <CardDeck style={{display: "flex", flexWrap: "wrap"}}>{boardGameLinks}</CardDeck>
     </div>
   );
 }
