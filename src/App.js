@@ -15,8 +15,6 @@ import NewBoardGame from './components/NewBoardGame';
 
 function App() {
 
-  const count = useSelector(state => state.countReducer.count)
-
   const user = useSelector(state => state.userReducer.user)
 
   if(!user){
@@ -42,9 +40,6 @@ function App() {
 
   return (
     <>
-      {/* <h3>Current Count = {count}</h3>
-      <button onClick={() => dispatch({type: "increment", payload: 3})}>Increment Count by 3</button>
-      <button onClick={() => dispatch({type: "decrement", payload: 1})}>Decrememnt by 1</button> */}
       <Nav />
       <Switch>
         <Route exact path="/login">
@@ -64,6 +59,9 @@ function App() {
         </Route>
         <Route exact path="/users">
         {!token ? <Redirect to="/login" /> : <UserList />}
+        </Route>
+        <Route exact path="/">
+          <BoardGameList />
         </Route>
         <Route exact path="/users/:id">
         {!token ? <Redirect to="/login" /> : <UserShow />}

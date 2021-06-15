@@ -3,10 +3,9 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import CardDeck from "react-bootstrap/CardDeck";
-import styled from "styled-components"
+// import styled from "styled-components";
 
 function BoardGameList() {
-  // GET Field Logic
   const [searchTerm, setSearchTerm] = useState("");
   const boardGames = useSelector((state) => state.boardGameReducer.boardGames);
 
@@ -36,41 +35,53 @@ function BoardGameList() {
 
   const boardGameLinks = searchBoardGames.map((boardGame) => {
     return (
-      <Card key={boardGame.id} style={{ width: "15vw", margin: "8px" }}>
-          <div style={{width: "15vw", height: "20vw"}}>
-                <Card.Img style={{maxWidth: "100%", maxHeight: "90%"}} src={`${boardGame.image}`} />
+      <Link
+        to={(location) => {
+          location.pathname = `/boardgames/${boardGame.id}`;
+          dispatch({ type: "setSelectedBoardGame", payload: boardGame });
+        }}
+        key={boardGame.id}
+      >
+        <Card  style={{ width: "15vw", margin: "8px" }}>
+          <div style={{ width: "15vw", height: "20vw" }}>
+            <Card.Img
+              style={{ maxWidth: "100%", maxHeight: "90%", borderRadius: "25%" }}
+              src={`${boardGame.image}`}
+            />
           </div>
-        <Card.Body>
-            <div style={{height: "7vw"}}>
-                <Card.Title style={{fontSize: "1rem"}}>{boardGame.title}</Card.Title>
+          <Card.Body>
+            <div style={{ height: "7vw" }}>
+              <Card.Title style={{ fontSize: ".8rem", color: "#344A53" }}>
+                {boardGame.title}
+              </Card.Title>
             </div>
-          <Link
-            to={(location) => {
-              location.pathname = `/boardgames/${boardGame.id}`;
-              dispatch({ type: "setSelectedBoardGame", payload: boardGame });
-            }}
-          >
-            <button>More Info</button>
-          </Link>
-        </Card.Body>
-      </Card>
+          </Card.Body>
+        </Card>
+      </Link>
     );
   });
 
   return (
     <div>
-      <form>
+      <div style={{margin: "4vh"}} >
+      <form style={{display: "inline", margin: "4vh"}}>
+        <label style={{color: "#344A53", fontWeight: "bolder", margin: "4vh"}}>Search Boardgames:</label>
         <input
           type="text"
           onChange={(e) => setSearchTerm(e.target.value)}
           value={searchTerm}
         />
       </form>
-      <Link to={(location) => (location.pathname = "/boardgames/new")}>
-        Add A Boardgame
+      <Link to={(location) => (location.pathname = "/boardgames/new")} style={{display: "inline", float: "right", marginRight: "4vh", color: "#344A53", fontWeight: "bolder"}}>
+        Can't Find It?
       </Link>
+      </div>
       <br />
-      <CardDeck style={{display: "flex", flexWrap: "wrap"}}>{boardGameLinks}</CardDeck>
+      <CardDeck
+        style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", textAlign: "center" }}
+      >
+        {boardGameLinks}
+      </CardDeck>
     </div>
   );
 }

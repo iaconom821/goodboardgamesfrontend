@@ -75,6 +75,7 @@ function SignUp() {
         localStorage.token = resp.token
         resp.user.token = resp.token 
         dispatch({type: "setUser", payload: resp.user })
+        dispatch({type: "setSelectedUserFromFetch", payload: resp.user})
         history.push(`/users/${resp.user.id}`)
     });
   }

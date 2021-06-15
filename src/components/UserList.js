@@ -1,12 +1,25 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+
+const StyledImg = styled.img`
+  border-radius: 25%;
+  height: 30vh;
+  display: block;
+  margin: 1vw;`
+
+const StyledDiv = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  text-align: center;
+  margin: 5vh;`
+
 
 function UserList() {
-  // GET Field Logic
+ 
   const users = useSelector((state) => state.userReducer.users);
-  const user = useSelector((state) => state.userReducer.user)
-
+  
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -23,7 +36,6 @@ function UserList() {
   });
 
   if (!users[0]) {
-    console.log(users);
     if (typeof users === "object") {
       return <h2>{users.message}</h2>;
     }
@@ -38,13 +50,15 @@ function UserList() {
           dispatch({ type: "setSelectedUser", payload: user });
         }}
         key={user.id}
+        style={{color: "#344A53"}}
       >
+        <StyledImg src={user.profile_picture} alt='profile'/>
         {user.name}
       </Link>
     );
   });
 
-  return <div>{userLinks}</div>;
+  return <StyledDiv>{userLinks}</StyledDiv>;
 }
 
 export default UserList;

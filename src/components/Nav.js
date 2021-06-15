@@ -33,7 +33,7 @@ function Nav() {
 
 
   return (
-    <Navbar style={{background: '#FCFCD4'}}>
+    <Navbar style={{background: '#FCFCD4', borderBottom: "2px solid #344A53", borderTop: "2px solid #344A53"}}>
         <img style={{backgroundColor: "#FCFCD4", width: "62vh", height: "18vh"}} src="https://i.ibb.co/Z2fBDBY/goodboardgames.png" alt="goodboardgames" />
       <StyledLink to="/signup">Sign Up</StyledLink>
       <StyledLink to="/login">Login</StyledLink>

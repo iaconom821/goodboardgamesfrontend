@@ -2,30 +2,39 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 
+const StyledDiv = styled.div`
+  margin: auto;
+  margin-top: 10vh;
+  background-color: #FCFCD4;
+  width: fit-content;
+  border-radius: 6px;
+  border: 2px solid #344A53;`
+
 const StyledForm = styled.form`
   position: relative;
   margin: auto;
   text-align: center;
   justify-content: center;
   padding: 5px;
-  width: fit-content;
-`;
+`
 
 const StyledLabel = styled.label`
-  color: #39ff14;
-`;
+  color: #79B7CF;
+  text-align: center;
+  margin: 10px;
+  font-weight: bold;
+  `
 
 const StyledInput = styled.input`
   display: block;
-  color: magenta;
+  color: #FCFCD4;
   border-radius: 5px;
   border: 1px solid black;
   text-align: center;
+  background-color: #344A53;
   margin: auto;
-  text-align-last: center;
-  width: 100%;
   box-sizing: border-box;
-`;
+  `
 
 function NewReview() {
   const [title, setTitle] = useState("");
@@ -87,10 +96,9 @@ function NewReview() {
   }
 
   return (
+    <StyledDiv>
+      <StyledLabel as="h2" style={{ fontWeight: "bolder" }}>New Review</StyledLabel>
     <StyledForm onSubmit={handleNewReview}>
-      <StyledLabel style={{ fontWeight: "bolder" }}>New Review</StyledLabel>
-      <br />
-      <br />
       <StyledLabel>Title</StyledLabel>
       <StyledInput
         type="text"
@@ -122,10 +130,11 @@ function NewReview() {
         value={firstTimeDifficulty}
         onChange={(e) => setFirstTimeDifficulty(e.target.value)}
       />
-      <StyledInput as="button" type="submit">
+      <StyledInput as="button" type="submit" style={{marginTop: "2vh"}}>
         Submit New Review
       </StyledInput>
     </StyledForm>
+    </StyledDiv>
   );
 }
 
