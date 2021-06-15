@@ -3,6 +3,14 @@ import styled from 'styled-components'
 import { useDispatch } from "react-redux"
 import { useHistory } from "react-router-dom"
 
+const StyledDiv = styled.div`
+  margin: auto;
+  margin-top: 10vh;
+  background-color: #FCFCD4;
+  width: fit-content;
+  border-radius: 6px;
+  border: 2px solid #344A53;`
+
 const StyledForm = styled.form`
   position: relative;
   margin: auto;
@@ -12,18 +20,23 @@ const StyledForm = styled.form`
 `
 
 const StyledLabel = styled.label`
-  color: #39FF14;
+  color: #79B7CF;
+  text-align: center;
+  margin: 10px;
+  font-weight: bold;
   `
 
 const StyledInput = styled.input`
   display: block;
-  color: magenta;
+  color: #FCFCD4;
   border-radius: 5px;
   border: 1px solid black;
   text-align: center;
+  background-color: #344A53;
   margin: auto;
   box-sizing: border-box;
   `
+
 
 function SignUp() {
   const [userName, setUserName] = useState("");
@@ -67,8 +80,8 @@ function SignUp() {
   }
 
   return (
-    <div>
-      <h2 style={{color: '#39FF14', margin: '0px', marginTop: '10px'}}>Sign Up</h2>
+    <StyledDiv>
+      <StyledLabel as="h2">Sign Up</StyledLabel>
       <StyledForm onSubmit={(e) => signUp(e)}>
         <StyledLabel>Name</StyledLabel>
         <StyledInput
@@ -105,9 +118,9 @@ function SignUp() {
           value={passWord}
           onChange={(e) => setPassWord(e.target.value)}
         />
-        <StyledInput type="submit" />
+        <StyledInput type="submit" style={{marginTop: "2vh"}} />
       </StyledForm>
-    </div>
+    </StyledDiv>
   );
 }
 

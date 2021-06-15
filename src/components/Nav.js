@@ -1,19 +1,27 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
+import Navbar from "react-bootstrap/Navbar"
 
 
 const StyledLink = styled(Link)`
   padding: 4px;
   margin: 3px;
-  border: 1px solid black;
-  border-radius: 2px;
-  background: whitesmoke;
-  font-size: 0.9em;
+  font-size: 0.9rem;
   text-decoration: none;
-  color: magenta;
+  color: #79B7CF;
+  vertical-align: center;
   font: Arial;
+  font-weight: bolder;
+  float: right;
+  &:hover {
+      color: #C5A4C7;
+  }
+  &:active {
+    color: #344A53;
+  }
 `;
+
 
 function Nav() {
   const dispatch = useDispatch();
@@ -23,9 +31,10 @@ function Nav() {
     return null;
   }
 
+
   return (
-    <div>
-        <img style={{backgroundColor: "#FCFCD4", width: "62vh", height: "18vh"}} src="" alt="goodboardgames" />
+    <Navbar style={{background: '#FCFCD4'}}>
+        <img style={{backgroundColor: "#FCFCD4", width: "62vh", height: "18vh"}} src="https://i.ibb.co/Z2fBDBY/goodboardgames.png" alt="goodboardgames" />
       <StyledLink to="/signup">Sign Up</StyledLink>
       <StyledLink to="/login">Login</StyledLink>
       <StyledLink to="/boardgames">All Boardgames</StyledLink>
@@ -40,7 +49,7 @@ function Nav() {
       >
         Log Out
       </StyledLink>
-    </div>
+    </Navbar>
   );
 }
 
