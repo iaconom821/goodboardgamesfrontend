@@ -2,31 +2,40 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 
+const StyledDiv = styled.div`
+  margin: auto;
+  margin-top: 10vh;
+  background-color: #fcfcd4;
+  width: fit-content;
+  border-radius: 6px;
+  border: 2px solid #344a53;
+`;
+
 const StyledForm = styled.form`
   position: relative;
   margin: auto;
   text-align: center;
   justify-content: center;
   padding: 5px;
-  width: fit-content;
 `;
 
 const StyledLabel = styled.label`
-  color: #39ff14;
+  color: #79b7cf;
+  text-align: center;
+  margin: 10px;
+  font-weight: bold;
 `;
 
 const StyledInput = styled.input`
   display: block;
-  color: magenta;
+  color: #fcfcd4;
   border-radius: 5px;
   border: 1px solid black;
   text-align: center;
+  background-color: #344a53;
   margin: auto;
-  text-align-last: center;
-  width: 100%;
   box-sizing: border-box;
 `;
-
 function EditReview({ editId }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -86,45 +95,47 @@ function EditReview({ editId }) {
   }
 
   return (
-    <StyledForm onSubmit={handleEditReview}>
-      <StyledLabel style={{ fontWeight: "bolder" }}>Edit Review</StyledLabel>
-      <br />
-      <br />
-      <StyledLabel>Title</StyledLabel>
-      <StyledInput
-        type="text"
-        name="title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
-      <StyledLabel>Description</StyledLabel>
-      <StyledInput
-        type="text"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
-      <StyledLabel>Overall Rating</StyledLabel>
-      <StyledInput
-        type="number"
-        value={overallRating}
-        onChange={(e) => setOverallRating(e.target.value)}
-      />
-      <StyledLabel>Replayability</StyledLabel>
-      <StyledInput
-        type="number"
-        value={replayability}
-        onChange={(e) => setReplayability(e.target.value)}
-      />
-      <StyledLabel>First Time Difficulty</StyledLabel>
-      <StyledInput
-        type="number"
-        value={firstTimeDifficulty}
-        onChange={(e) => setFirstTimeDifficulty(e.target.value)}
-      />
-      <StyledInput as="button" type="submit">
-        Submit Edited Review
-      </StyledInput>
-    </StyledForm>
+    <StyledDiv>
+      <StyledLabel as="h2" style={{ fontWeight: "bolder" }}>
+        Edit Review
+      </StyledLabel>
+      <StyledForm onSubmit={handleEditReview}>
+        <StyledLabel>Title</StyledLabel>
+        <StyledInput
+          type="text"
+          name="title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <StyledLabel>Description</StyledLabel>
+        <StyledInput
+          type="text"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        <StyledLabel>Overall Rating</StyledLabel>
+        <StyledInput
+          type="number"
+          value={overallRating}
+          onChange={(e) => setOverallRating(e.target.value)}
+        />
+        <StyledLabel>Replayability</StyledLabel>
+        <StyledInput
+          type="number"
+          value={replayability}
+          onChange={(e) => setReplayability(e.target.value)}
+        />
+        <StyledLabel>First Time Difficulty</StyledLabel>
+        <StyledInput
+          type="number"
+          value={firstTimeDifficulty}
+          onChange={(e) => setFirstTimeDifficulty(e.target.value)}
+        />
+        <StyledInput as="button" type="submit">
+          Submit Edited Review
+        </StyledInput>
+      </StyledForm>
+    </StyledDiv>
   );
 }
 

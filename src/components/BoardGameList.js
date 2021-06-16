@@ -3,7 +3,16 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import CardDeck from "react-bootstrap/CardDeck";
-// import styled from "styled-components";
+import styled from "styled-components";
+
+const StyledInput = styled.input`
+  color: #FCFCD4;
+  border-radius: 5px;
+  border: 1px solid black;
+  background-color: #344A53;
+  margin: auto;
+  box-sizing: border-box;
+  `
 
 function BoardGameList() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -66,7 +75,7 @@ function BoardGameList() {
       <div style={{margin: "4vh"}} >
       <form style={{display: "inline", margin: "4vh"}}>
         <label style={{color: "#344A53", fontWeight: "bolder", margin: "4vh"}}>Search Boardgames:</label>
-        <input
+        <StyledInput
           type="text"
           onChange={(e) => setSearchTerm(e.target.value)}
           value={searchTerm}

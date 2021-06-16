@@ -12,6 +12,15 @@ const StyledP = styled.p`
   margin: 4vw;
 `;
 
+const StyledPReview = styled.p`
+  color: #344a53;
+  width: fit-content;
+  display: block;
+  margin: 4vw;
+  margin-top: 2px;
+  margin-bottom: 2px;
+`;
+
 const StyledDiv = styled.div`
   margin: auto;
   display: flex;
@@ -126,27 +135,29 @@ function BoardGameShow() {
         {boardGame.reviews
           ? boardGame.reviews.map((review) => (
               <li key={review.id}>
-                <StyledP>Title: {review.title}</StyledP>
-                <StyledP>Description: {review.description}</StyledP>
-                <StyledP>Overall Rating: {review.overall_rating}</StyledP>
-                <StyledP>Replayability Score: {review.replayability}</StyledP>
-                <StyledP>
+                <StyledPReview>Title: {review.title}</StyledPReview>
+                <StyledPReview>Description: {review.description}</StyledPReview>
+                <StyledPReview>Overall Rating: {review.overall_rating}</StyledPReview>
+                <StyledPReview>Replayability Score: {review.replayability}</StyledPReview>
+                <StyledPReview>
                   First Time Difficulty Rating: {review.first_time_difficulty}
-                </StyledP>
+                </StyledPReview>
                 {parseInt(review.user_id) === parseInt(user.id) ? (
                   <StyledInput as="button" onClick={() => handleDeleteReview(review.id)}>
                     Delete Review
                   </StyledInput>
                 ) : null}
                 {parseInt(review.user_id) === parseInt(user.id) ? (
-                  <button onClick={() => handleEditReview(review.id)}>
+                  <StyledInput as="button" onClick={() => handleEditReview(review.id)}>
                     Edit Review
-                  </button>
+                  </StyledInput>
                 ) : null}
               </li>
             ))
           : null}
       </ul>
+      {newReviewForm ? <NewReview /> : null}
+      {editForm ? <EditReview editId={editId} /> : null}
       {user.name ? (
         <>
           <StyledInput as="button" onClick={() => setNewReviewForm(!newReviewForm)}>
@@ -156,8 +167,6 @@ function BoardGameShow() {
         </>
       ) : null}
 
-      {newReviewForm ? <NewReview /> : null}
-      {editForm ? <EditReview editId={editId} /> : null}
     </div>
   );
 }
