@@ -48,6 +48,7 @@ function NewBoardGame() {
   const [manufacturer, setManufacturer] = useState("");
   const [description, setDescription] = useState("");
   const [upcCode, setUpcCode] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [scanner, setScanner] = useState(false);
 
   const boardGames = useSelector((state) => state.boardGames);
@@ -69,11 +70,16 @@ function NewBoardGame() {
         title: title,
         manufacturer: manufacturer,
         description: description,
+        image: imageUrl, 
         upc_code: upcCode,
       }),
     })
       .then((res) => res.json())
       .then((newBoardGame) => {
+        if (typeof(newBoardGame.title) !== "string" || typeof(newBoardGame.description) !== "string" || typeof(newBoardGame.manufacturer !== "string")){
+          alert(Object.keys(newBoardGame).map(key=> ` ${key}-${newBoardGame[key][0]}`).toString())
+          return null
+        }
         if (!boardGames) {
           fetch("http://localhost:3000/api/v1/boardgames")
             .then((res) => res.json())
@@ -165,6 +171,12 @@ function NewBoardGame() {
           type="text"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
+        />
+        <StyledLabel>Image URL</StyledLabel>
+        <StyledInput
+          type="text"
+          value={imageUrl}
+          onChange={(e) => setImageUrl(e.target.value)}
         />
         <StyledLabel>UPC Code</StyledLabel>
         <StyledInput

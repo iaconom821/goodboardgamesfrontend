@@ -9,7 +9,7 @@ const StyledP = styled.p`
   color: #344a53;
   width: fit-content;
   display: block;
-  margin: 4vw;
+  margin: 2vw;
 `;
 
 const StyledPReview = styled.p`
@@ -38,13 +38,19 @@ const StyledImg = styled.img`
 `;
 
 const StyledInput = styled.input`
-  color: #FCFCD4;
+  color: #fcfcd4;
   border-radius: 5px;
-  border: 1px solid #344A53;
+  border: 1px solid #344a53;
   text-align: center;
-  background-color: #344A53;
+  background-color: #344a53;
   margin: 4vh;
-  `
+`;
+
+const StyledReviewDiv = styled.li`
+  border-radius: 4px;
+  margin: 1vh;
+  padding: 1vh;
+`;
 
 function BoardGameShow() {
   // GET Field Logic
@@ -127,46 +133,83 @@ function BoardGameShow() {
           <StyledP as="h4">Brand: {boardGame.manufacturer}</StyledP>
         </StyledInnerDiv>
         <StyledInnerDiv>
-          <StyledImg src={boardGame.image} alt="game"/>
+          <StyledImg src={boardGame.image} alt="game" />
         </StyledInnerDiv>
       </StyledDiv>
-      <ul>
-        <StyledP as="h3">Reviews</StyledP>
-        {boardGame.reviews
-          ? boardGame.reviews.map((review) => (
-              <li key={review.id}>
-                <StyledPReview>Title: {review.title}</StyledPReview>
-                <StyledPReview>Description: {review.description}</StyledPReview>
-                <StyledPReview>Overall Rating: {review.overall_rating}</StyledPReview>
-                <StyledPReview>Replayability Score: {review.replayability}</StyledPReview>
+      <div style={{display: "flex"}}>
+        <div style={{width: "100%"}}>
+          <StyledP as="h3">Reviews</StyledP>
+          <ul
+            style={{ listStyle: "none", width: "fit-content", padding: "1vw" }}
+          >
+            {boardGame.reviews
+              ? boardGame.reviews.map((review) => (
+                  <StyledReviewDiv
+                    key={review.id}
+                  >
+                    <StyledPReview>Title: {review.title}</StyledPReview>
+                    <StyledPReview>
+                      Description: {review.description}
+                    </StyledPReview>
+                    <StyledPReview>
+                      Overall Rating: {review.overall_rating}
+                    </StyledPReview>
+                    <StyledPReview>
+                      Replayability Score: {review.replayability}
+                    </StyledPReview>
+                    <StyledPReview>
+                      First Time Difficulty Rating:{" "}
+                      {review.first_time_difficulty}
+                    </StyledPReview>
+                    {parseInt(review.user_id) === parseInt(user.id) ? (
+                      <StyledInput
+                        as="button"
+                        onClick={() => handleDeleteReview(review.id)}
+                      >
+                        Delete Review
+                      </StyledInput>
+                    ) : null}
+                    {parseInt(review.user_id) === parseInt(user.id) ? (
+                      <StyledInput
+                        as="button"
+                        onClick={() => handleEditReview(review.id)}
+                      >
+                        Edit Review
+                      </StyledInput>
+                    ) : null}
+                  </StyledReviewDiv>
+                ))
+              : null}
+          </ul>
+          {newReviewForm ? <NewReview /> : null}
+          {editForm ? <EditReview editId={editId} /> : null}
+          {user.name ? (
+            <>
+              <StyledInput
+                as="button"
+                onClick={() => setNewReviewForm(!newReviewForm)}
+              >
+                Add A Review
+              </StyledInput>
+              <StyledInput as="button" onClick={() => handleAddToShelf()}>
+                Add to Game Shelf
+              </StyledInput>
+            </>
+          ) : null}
+        </div>
+        <div style={{width: "100%"}}>
+          <h3>Sessions</h3>
+            {boardGame.sessions ? boardGame.sessions.map(session => {
+              return (
+              <div key={session.id}>
                 <StyledPReview>
-                  First Time Difficulty Rating: {review.first_time_difficulty}
+                  {session.date}
                 </StyledPReview>
-                {parseInt(review.user_id) === parseInt(user.id) ? (
-                  <StyledInput as="button" onClick={() => handleDeleteReview(review.id)}>
-                    Delete Review
-                  </StyledInput>
-                ) : null}
-                {parseInt(review.user_id) === parseInt(user.id) ? (
-                  <StyledInput as="button" onClick={() => handleEditReview(review.id)}>
-                    Edit Review
-                  </StyledInput>
-                ) : null}
-              </li>
-            ))
-          : null}
-      </ul>
-      {newReviewForm ? <NewReview /> : null}
-      {editForm ? <EditReview editId={editId} /> : null}
-      {user.name ? (
-        <>
-          <StyledInput as="button" onClick={() => setNewReviewForm(!newReviewForm)}>
-            Add A Review
-          </StyledInput>
-          <StyledInput as="button" onClick={() => handleAddToShelf()}>Add to Game Shelf</StyledInput>
-        </>
-      ) : null}
-
+              </div>)
+            }) : null}
+          <StyledInput as="button">Add a Session</StyledInput>
+        </div>
+      </div>
     </div>
   );
 }
