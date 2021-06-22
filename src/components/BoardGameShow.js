@@ -1,9 +1,11 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useState } from "react";
 import NewReview from "./NewReview";
 import EditReview from "./EditReview";
+import NewSessionForm from "./NewSessionForm.js"
 import styled from "styled-components";
+
 
 const StyledP = styled.p`
   color: #344a53;
@@ -47,6 +49,7 @@ const StyledInput = styled.input`
 `;
 
 const StyledReviewDiv = styled.li`
+  background: #FCFCD4;
   border-radius: 4px;
   margin: 1vh;
   padding: 1vh;
@@ -56,12 +59,12 @@ function BoardGameShow() {
   // GET Field Logic
   const [newReviewForm, setNewReviewForm] = useState(false);
   const [editForm, setEditForm] = useState(false);
-  const [editId, setEditId] = useState(0);
+  const [editInfo, setEditInfo] = useState(null);
+  const [newSessionForm, setNewSessionForm] = useState(false);
   const boardGame = useSelector(
     (state) => state.boardGameReducer.selectedBoardGame
   );
   const user = useSelector((state) => state.userReducer.user);
-  console.log(boardGame);
   const dispatch = useDispatch();
   const { id } = useParams();
 
@@ -92,10 +95,18 @@ function BoardGameShow() {
       });
   }
 
-  function handleEditReview(id) {
+  function handleEditReview(reviewData) {
     setNewReviewForm(false);
     setEditForm(!editForm);
-    setEditId(id);
+    setEditInfo(reviewData);
+  }
+
+  function closeNewReviewAfterSubmission() {
+    setNewReviewForm(false)
+  }
+
+  function closeEditReviewAfterSubmission(){
+    setEditForm(false)
   }
 
   function handleAddToShelf() {
@@ -172,7 +183,7 @@ function BoardGameShow() {
                     {parseInt(review.user_id) === parseInt(user.id) ? (
                       <StyledInput
                         as="button"
-                        onClick={() => handleEditReview(review.id)}
+                        onClick={() => handleEditReview(review)}
                       >
                         Edit Review
                       </StyledInput>
@@ -181,8 +192,8 @@ function BoardGameShow() {
                 ))
               : null}
           </ul>
-          {newReviewForm ? <NewReview /> : null}
-          {editForm ? <EditReview editId={editId} /> : null}
+          {newReviewForm ? <NewReview closeNewReviewAfterSubmission={closeNewReviewAfterSubmission}/> : null}
+          {editForm ? <EditReview editInfo={editInfo} closeEditReviewAfterSubmission={closeEditReviewAfterSubmission} /> : null}
           {user.name ? (
             <>
               <StyledInput
@@ -201,13 +212,14 @@ function BoardGameShow() {
           <h3>Sessions</h3>
             {boardGame.sessions ? boardGame.sessions.map(session => {
               return (
-              <div key={session.id}>
+              <Link to={location => location.pathname = `/sessions/${session.id}`} key={session.id}>
                 <StyledPReview>
                   {session.date}
                 </StyledPReview>
-              </div>)
+              </Link>)
             }) : null}
-          <StyledInput as="button">Add a Session</StyledInput>
+          <StyledInput as="button" onClick={()=>setNewSessionForm(!newSessionForm)}>Add a Session</StyledInput>
+          {newSessionForm ? <NewSessionForm /> : null}
         </div>
       </div>
     </div>

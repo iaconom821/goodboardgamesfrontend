@@ -36,7 +36,7 @@ const StyledInput = styled.input`
   box-sizing: border-box;
   `
 
-function NewReview() {
+function NewReview({closeNewReviewAfterSubmission}) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [overallRating, setOverallRating] = useState(0);
@@ -88,6 +88,7 @@ function NewReview() {
           return null;
         }
         dispatch({ type: "updateBoardGame", payload: updatedBoardGame });
+        closeNewReviewAfterSubmission();
       });
   }
 

@@ -62,10 +62,11 @@ function Login() {
           alert("Invalid Username or Password")
           return null
         }
+        const formattedUserInfo = {...userInfo.user, owned_games: userInfo.owned_games, sessions: userInfo.sessions, usersessions: userInfo.usersessions}
         localStorage.token = userInfo.token;
         localStorage.userId = userInfo.user.id;
-        userInfo.user.token = userInfo.token;
-        dispatch({type: "setUser", payload: userInfo.user})
+        formattedUserInfo.token = userInfo.token;
+        dispatch({type: "setUser", payload: formattedUserInfo})
         history.push("/boardgames");
       });
   }

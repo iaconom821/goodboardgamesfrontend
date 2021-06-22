@@ -36,12 +36,12 @@ const StyledInput = styled.input`
   margin: auto;
   box-sizing: border-box;
 `;
-function EditReview({ editId }) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [overallRating, setOverallRating] = useState(0);
-  const [replayability, setReplayability] = useState(0);
-  const [firstTimeDifficulty, setFirstTimeDifficulty] = useState(0);
+function EditReview({ editInfo, closeEditReviewAfterSubmission }) {
+  const [title, setTitle] = useState(editInfo.title);
+  const [description, setDescription] = useState(editInfo.description);
+  const [overallRating, setOverallRating] = useState(editInfo.overall_rating);
+  const [replayability, setReplayability] = useState(editInfo.replayability);
+  const [firstTimeDifficulty, setFirstTimeDifficulty] = useState(editInfo.first_time_difficulty);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.userReducer.user.id);
   const boardgame = useSelector(
@@ -51,7 +51,7 @@ function EditReview({ editId }) {
   function handleEditReview(e) {
     e.preventDefault();
 
-    fetch(`http://localhost:3000/api/v1/reviews/${editId}`, {
+    fetch(`http://localhost:3000/api/v1/reviews/${editInfo.id}`, {
       method: "PATCH",
       headers: {
         "content-type": "application/json",
@@ -87,6 +87,7 @@ function EditReview({ editId }) {
           return null;
         }
         dispatch({ type: "updateBoardGame", payload: updatedBoardGame });
+        closeEditReviewAfterSubmission();
       });
   }
 

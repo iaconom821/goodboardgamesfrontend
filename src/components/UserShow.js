@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, Link, useHistory } from "react-router-dom";
@@ -65,7 +66,8 @@ function UserShow() {
   const dispatch = useDispatch();
   const { id } = useParams();
   const history = useHistory();
-
+  const boardgames = useSelector(state => state.boardGameReducer.boardGames)
+  
   if (!user) {
     fetch(`http://localhost:3000/api/v1/users/${id}`, {
       headers: {
@@ -76,7 +78,7 @@ function UserShow() {
       .then((selectedUser) => {
         dispatch({ type: "setSelectedUserFromFetch", payload: selectedUser });
       });
-
+      
     return <h2>Loading</h2>;
   }
   if (parseInt(user.id) !== parseInt(id)) {
@@ -141,6 +143,7 @@ function UserShow() {
       });
   }
 
+
   let userBoardgamesLinks = [];
 
   if (user.owned_games[0]) {
@@ -166,6 +169,56 @@ function UserShow() {
             </StyledButton>
           ) : null}
         </StyledInnerDiv>
+      );
+    });
+  }
+
+  let sessionLinks = [];
+
+  const timesGamePlayedObj = {};
+
+  let gamesWon = 0;
+
+  if (user.sessions[0]) {
+    for (let i = 0; i < user.sessions.length; i++) {
+      if (!timesGamePlayedObj[user.sessions[i].boardgame_id]) {
+        timesGamePlayedObj[user.sessions[i].boardgame_id] = 0;
+      }
+      timesGamePlayedObj[user.sessions[i].boardgame_id] += 1;
+      if (user.sessions[i].winner === user.id){
+        gamesWon += 1
+      }
+    }
+
+    const memo = {}
+
+    let uniqueSessions = user.sessions.filter((session) => {
+      if(memo[session.boardgame_id]){
+        return false
+      } else{
+        memo[session.boardgame_id] = true 
+        return true 
+      }
+    });
+    console.log(user)
+    sessionLinks = uniqueSessions.map((session) => {
+      return (
+        <Fragment key={session.id}>
+        <Link
+          to={(location) =>
+            (location.pathname = `/boardgames/${session.boardgame_id}`)
+          }
+          onClick={() =>
+            dispatch({
+              type: "setSelectedBoardGameFromId",
+              payload: session.boardgame_id,
+            })
+          }
+        >
+          {`${boardgames.find((el)=>el.id === session.boardgame_id).title}`}
+        </Link>
+          <span><p>{`${timesGamePlayedObj[session.boardgame_id]}`}</p></span>
+        </Fragment>
       );
     });
   }
@@ -214,7 +267,9 @@ function UserShow() {
             <>
               <StyledP>Name: {user.name}</StyledP>
               <StyledP>Username: {user.username}</StyledP>
-              { user.id === loggedInUser.id ? <StyledP>Email: {user.email}</StyledP> : null }
+              {user.id === loggedInUser.id ? (
+                <StyledP>Email: {user.email}</StyledP>
+              ) : null}
             </>
           )}
           {user.id === loggedInUser.id ? (
@@ -231,10 +286,10 @@ function UserShow() {
           ) : null}
           {deleteProfileBool ? (
             <>
-            <br></br>
-            <StyledButton onClick={() => deleteProfile()}>
-              Confirm Delete
-            </StyledButton>
+              <br></br>
+              <StyledButton onClick={() => deleteProfile()}>
+                Confirm Delete
+              </StyledButton>
             </>
           ) : null}
         </StyledInnerDiv>
@@ -247,8 +302,18 @@ function UserShow() {
         </StyledInnerDiv>
       </StyledDiv>
       <br></br>
-      <h3>Game Shelf</h3>
-      {user.owned_games[0] ? userBoardgamesLinks : null}
+      <div>
+        <div>
+          <h3>Game Shelf</h3>
+          {user.owned_games[0] ? userBoardgamesLinks : null}
+        </div>
+        <div>
+          <h3>Played Games</h3>
+          {user.sessions[0] ? sessionLinks : null}
+          <h4>Games Won</h4>
+          <p>{gamesWon}</p>
+        </div>
+      </div>
     </div>
   );
 }

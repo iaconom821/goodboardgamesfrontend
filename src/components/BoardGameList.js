@@ -47,8 +47,8 @@ function BoardGameList() {
       <Link
         to={(location) => {
           location.pathname = `/boardgames/${boardGame.id}`;
-          dispatch({ type: "setSelectedBoardGame", payload: boardGame });
         }}
+        onClick={() => dispatch({ type: "setSelectedBoardGame", payload: boardGame })}
         key={boardGame.id}
       >
         <Card  style={{ width: "15vw", margin: "8px" }}>

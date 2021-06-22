@@ -3,7 +3,6 @@ let initialState = { user: null, users: [], selectedUser: null, token: null};
 let userReducer = (state = initialState, action) => {
   switch (action.type) {
     case "setUser":
-        console.log(action.payload)
       return {
         ...state,
         user: action.payload,
@@ -19,6 +18,7 @@ let userReducer = (state = initialState, action) => {
       const selectUser = state.users.find(
         (user) => user.id === action.payload.id
       );
+      
       return {
         ...state,
         selectedUser: selectUser,

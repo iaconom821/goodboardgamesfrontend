@@ -29,7 +29,6 @@ function UserList() {
       })
         .then((res) => res.json())
         .then((userList) => {
-            console.log(userList)
           dispatch({ type: "setUsers", payload: userList });
         });
     }
@@ -45,10 +44,8 @@ function UserList() {
   const userLinks = users.map((user) => {
     return (
       <Link
-        to={(location) => {
-          location.pathname = `/users/${user.id}`;
-          dispatch({ type: "setSelectedUser", payload: user });
-        }}
+        to={(location) => location.pathname = `/users/${user.id}`}
+        onClick={() => dispatch({ type: "setSelectedUser", payload: user })}
         key={user.id}
         style={{color: "#344A53"}}
       >

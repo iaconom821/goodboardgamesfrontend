@@ -8,7 +8,8 @@ import BoardGameList from './components/BoardGameList.js'
 import BoardGameShow from './components/BoardGameShow.js'
 import UserList from './components/UserList.js'
 import UserShow from './components/UserShow.js'
-import NewBoardGame from './components/NewBoardGame';
+import NewBoardGame from './components/NewBoardGame.js';
+import SessionShow from './components/SessionShow.js'
 
 
 
@@ -35,7 +36,7 @@ function App() {
         localStorage.userId = resp.id});
   }
   const token = useSelector(state => state.userReducer.token)
-  console.log(token)
+ 
   const dispatch = useDispatch()
 
   return (
@@ -65,6 +66,9 @@ function App() {
         </Route>
         <Route exact path="/users/:id">
         {!token ? <Redirect to="/login" /> : <UserShow />}
+        </Route>
+        <Route exact path="/sessions/:id">
+          <SessionShow />
         </Route>
       </Switch>
     </>
