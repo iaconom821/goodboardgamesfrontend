@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from 'styled-components'
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { useHistory } from "react-router-dom"
 
 const StyledDiv = styled.div`
@@ -44,6 +44,7 @@ function SignUp() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
+  const users = useSelector(state => state.userReducer.users)
 
 
   const dispatch = useDispatch()
@@ -76,6 +77,9 @@ function SignUp() {
           localStorage.userId = userInfo.user.id;
           formattedUserInfo.token = userInfo.token;
           dispatch({type: "setUser", payload: formattedUserInfo})
+          if(users[0]){
+            dispatch({type: "addUsertoUsers", payload: formattedUserInfo})
+          }
           history.push("/boardgames");
     });
   }

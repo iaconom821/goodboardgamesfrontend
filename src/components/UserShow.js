@@ -68,7 +68,6 @@ function UserShow() {
   const [editProfile, setEditProfile] = useState(false);
   const [deleteProfileBool, setDeleteProfileBool] = useState(false);
   const user = useSelector((state) => state.userReducer.selectedUser);
-
   const loggedInUser = useSelector((state) => state.userReducer.user);
   const [name, setName] = useState(null);
   const [username, setUsername] = useState(null);
@@ -78,7 +77,7 @@ function UserShow() {
   const { id } = useParams();
   const history = useHistory();
   const boardgames = useSelector(state => state.boardGameReducer.boardGames)
-  
+
   if (!user) {
     fetch(`http://localhost:3000/api/v1/users/${id}`, {
       headers: {
@@ -123,7 +122,8 @@ function UserShow() {
     })
       .then((res) => res.json())
       .then((returnedUser) => {
-        dispatch({ type: "setSelectedUserFromFetch", payload: returnedUser });
+        dispatch({ type: "setUserAndSelectedUserFromFetch", payload: returnedUser });
+        history.push(`/users/${returnedUser.id}`)
       });
   }
 
@@ -144,7 +144,6 @@ function UserShow() {
     })
       .then((res) => res.json())
       .then((returnedUser) => {
-        console.log(returnedUser);
         dispatch({ type: "setSelectedUserFromFetch", payload: returnedUser });
         setEditProfile(false);
       });
@@ -159,7 +158,7 @@ function UserShow() {
       },
     })
       .then((res) => res.json())
-      .then(() => {
+      .then((userInfo) => {
         dispatch({ type: "logout", payload: null });
       });
       history.push("/signup");

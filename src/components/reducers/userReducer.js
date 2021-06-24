@@ -14,6 +14,12 @@ let userReducer = (state = initialState, action) => {
         ...state,
         users: action.payload,
       };
+    case "addUsertoUsers":
+      const addedUser = [...state.users, action.payload]
+      return {
+        ...state,
+        users: addedUser
+      };
     case "setSelectedUser":
       const selectUser = state.users.find(
         (user) => user.id === action.payload.id
@@ -28,6 +34,26 @@ let userReducer = (state = initialState, action) => {
         ...state,
         selectedUser: action.payload,
       };
+    case "setUserAndSelectedUserFromFetch":
+    const changedUser = state.users.map(user => {
+      if(parseInt(user.id) === parseInt(action.payload.id)){
+        return action.payload
+      } else {
+        return user
+      }
+    })  
+    return {
+        ...state,
+        user: action.payload,
+        users: changedUser,
+        selectedUser: action.payload
+      }
+    case "setSelectedUserFromIdOnly":
+      const selUser = state.users.find(user => parseInt(user.id) === parseInt(action.payload))
+      return {
+        ...state,
+        selectedUser: selUser
+      }
     case "addToOwnedGames":
         return {
             ...state,

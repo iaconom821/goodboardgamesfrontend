@@ -101,7 +101,7 @@ function SessionShow() {
     return (
       <StyledP
         to={(location) => (location.pathname = `/users/${player.id}`)}
-        onClick={() => dispatch({ type: "setSelectedUser", payload: player })}
+        onClick={() => dispatch({ type: "setSelectedUserFromIdOnly", payload: player.id })}
         key={player.id}
       >
         {player.username}

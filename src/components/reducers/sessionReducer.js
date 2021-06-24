@@ -6,6 +6,10 @@ let sessionReducer = (state = initialState, action) => {
             return {
                 ...state, session: action.payload
             }
+        case "logout":
+            return {
+                ...state, ...initialState
+            }
         default:
             return state
         }

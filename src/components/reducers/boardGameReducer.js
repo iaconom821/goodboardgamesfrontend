@@ -39,6 +39,11 @@ let boardGameReducer = (state = initialState, action) => {
             return {
                 ...state, boardGames: [...state.boardGames, action.payload]
             }
+
+        case "logout":
+            return {
+                ...state, ...initialState
+            }
         default:
             return state
     }
