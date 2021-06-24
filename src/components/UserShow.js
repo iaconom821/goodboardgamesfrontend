@@ -8,7 +8,17 @@ const StyledLink = styled(Link)`
   color: #344a53;
   display: block;
   text-decoration: none;
-  margin: 2vh;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+  &:hover {
+    color: #79b7cf;
+    background: #fcfcd4;
+    border-radius: 10%;
+    text-decoration: none;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+  }
 `;
 
 const StyledP = styled.p`
@@ -29,7 +39,7 @@ const StyledInnerDiv = styled.div`
   border: 1px solid #c5a4c7;
 `;
 const StyledImg = styled.img`
-  border-radius: 25%;
+  border-radius: 10%;
 `;
 
 const StyledGameImg = styled.img`
@@ -58,11 +68,12 @@ function UserShow() {
   const [editProfile, setEditProfile] = useState(false);
   const [deleteProfileBool, setDeleteProfileBool] = useState(false);
   const user = useSelector((state) => state.userReducer.selectedUser);
+
   const loggedInUser = useSelector((state) => state.userReducer.user);
-  const [name, setName] = useState(user.name);
-  const [username, setUsername] = useState(user.username);
-  const [email, setEmail] = useState(user.email);
-  const [profilePicture, setProfilePicture] = useState(user.profile_picture);
+  const [name, setName] = useState(null);
+  const [username, setUsername] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [profilePicture, setProfilePicture] = useState(null);
   const dispatch = useDispatch();
   const { id } = useParams();
   const history = useHistory();
@@ -85,6 +96,19 @@ function UserShow() {
     dispatch({ type: "setSelectedUserFromFetch", payload: loggedInUser });
   }
 
+  if(boardgames){
+    if(!boardgames[0]){
+      fetch("http://localhost:3000/api/v1/boardgames")
+        .then((res) => res.json())
+        .then((boardGameList) => {
+          dispatch({ type: "setBoardGames", payload: boardGameList });
+        });
+        return (
+          <h2>Loading</h2>
+        )
+    }
+  }
+
   function handleRemoveFromShelf(boardgame_id) {
     fetch(`http://localhost:3000/api/v1/gameowners`, {
       method: "PATCH",
@@ -99,7 +123,6 @@ function UserShow() {
     })
       .then((res) => res.json())
       .then((returnedUser) => {
-        console.log(returnedUser);
         dispatch({ type: "setSelectedUserFromFetch", payload: returnedUser });
       });
   }
@@ -136,16 +159,17 @@ function UserShow() {
       },
     })
       .then((res) => res.json())
-      .then((returnedUser) => {
-        console.log(returnedUser);
+      .then(() => {
         dispatch({ type: "logout", payload: null });
-        history.push("/signup");
       });
+      history.push("/signup");
   }
 
 
   let userBoardgamesLinks = [];
-
+  if (!user.owned_games){
+    return null
+  }
   if (user.owned_games[0]) {
     userBoardgamesLinks = user.owned_games.map((game) => {
       return (
@@ -173,11 +197,17 @@ function UserShow() {
     });
   }
 
-  let sessionLinks = [];
+  let uniqueGameLinks = [];
+
+  let allSessionLinks = [];
 
   const timesGamePlayedObj = {};
 
   let gamesWon = 0;
+
+  if(!user.sessions){
+    return null
+  }
 
   if (user.sessions[0]) {
     for (let i = 0; i < user.sessions.length; i++) {
@@ -192,7 +222,7 @@ function UserShow() {
 
     const memo = {}
 
-    let uniqueSessions = user.sessions.filter((session) => {
+    let uniqueGames = user.sessions.filter((session) => {
       if(memo[session.boardgame_id]){
         return false
       } else{
@@ -200,11 +230,11 @@ function UserShow() {
         return true 
       }
     });
-    console.log(user)
-    sessionLinks = uniqueSessions.map((session) => {
+
+    uniqueGameLinks = uniqueGames.map((session) => {
       return (
         <Fragment key={session.id}>
-        <Link
+        <StyledLink key={session.id}
           to={(location) =>
             (location.pathname = `/boardgames/${session.boardgame_id}`)
           }
@@ -216,11 +246,29 @@ function UserShow() {
           }
         >
           {`${boardgames.find((el)=>el.id === session.boardgame_id).title}`}
-        </Link>
-          <span><p>{`${timesGamePlayedObj[session.boardgame_id]}`}</p></span>
+        </StyledLink>
+          <span key={session.id}> {`${timesGamePlayedObj[session.boardgame_id]} times`}</span>
         </Fragment>
       );
     });
+
+    allSessionLinks = user.sessions.map((session) => {
+      return (
+        <StyledLink key={session.id} style={{fontSize: '.7rem'}}
+          to={(location) =>
+            (location.pathname = `/sessions/${session.id}`)
+          }
+          onClick={() =>
+            dispatch({
+              type: "setSelectedBoardGameFromIdOnly",
+              payload: session.boardgame_id,
+            })
+          }
+        >
+          {`${session.date} - ${boardgames.find((el)=>el.id === session.boardgame_id).title}`}
+        </StyledLink>
+      )
+    })
   }
 
   return (
@@ -274,7 +322,12 @@ function UserShow() {
           )}
           {user.id === loggedInUser.id ? (
             <>
-              <StyledButton onClick={() => setEditProfile(!editProfile)}>
+              <StyledButton onClick={() => {
+                setName(user.name)
+                setEmail(user.email)
+                setUsername(user.username)
+                setProfilePicture(user.profile_picture)
+                setEditProfile(!editProfile)}}>
                 Edit Profile
               </StyledButton>
               <StyledButton
@@ -302,16 +355,18 @@ function UserShow() {
         </StyledInnerDiv>
       </StyledDiv>
       <br></br>
-      <div>
-        <div>
+      <div style={{display: 'flex'}}>
+        <div style={{width: '100%'}}>
           <h3>Game Shelf</h3>
           {user.owned_games[0] ? userBoardgamesLinks : null}
         </div>
-        <div>
+        <div style = {{width: '100%'}}>
           <h3>Played Games</h3>
-          {user.sessions[0] ? sessionLinks : null}
-          <h4>Games Won</h4>
+          {user.sessions[0] ? uniqueGameLinks : null}
+          <h4>Sessions Won</h4>
           <p>{gamesWon}</p>
+          <h5>All Sessions</h5>
+          {user.sessions[0] ? allSessionLinks : null }
         </div>
       </div>
     </div>

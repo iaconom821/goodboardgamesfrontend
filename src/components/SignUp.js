@@ -66,17 +66,17 @@ function SignUp() {
       }),
     })
       .then((res) => res.json())
-      .then((resp) => {
-        if(!resp.token){
-          alert("Invalid Field")
-          return null 
-        }
-        localStorage.userId = resp.user.id
-        localStorage.token = resp.token
-        resp.user.token = resp.token 
-        dispatch({type: "setUser", payload: resp.user })
-        dispatch({type: "setSelectedUserFromFetch", payload: resp.user})
-        history.push(`/users/${resp.user.id}`)
+      .then((userInfo) => {
+          if(!userInfo.token){
+            alert("Invalid Information")
+            return null
+          }
+          const formattedUserInfo = {...userInfo.user, owned_games: userInfo.owned_games, sessions: userInfo.sessions, usersessions: userInfo.usersessions}
+          localStorage.token = userInfo.token;
+          localStorage.userId = userInfo.user.id;
+          formattedUserInfo.token = userInfo.token;
+          dispatch({type: "setUser", payload: formattedUserInfo})
+          history.push("/boardgames");
     });
   }
 

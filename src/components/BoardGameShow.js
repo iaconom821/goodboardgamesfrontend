@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useHistory } from "react-router-dom";
 import { useState } from "react";
 import NewReview from "./NewReview";
 import EditReview from "./EditReview";
@@ -36,7 +36,7 @@ const StyledInnerDiv = styled.div`
 `;
 const StyledImg = styled.img`
   border-radius: 25%;
-  width: 40vw;
+  width: 50vh;
 `;
 
 const StyledInput = styled.input`
@@ -67,6 +67,7 @@ function BoardGameShow() {
   const user = useSelector((state) => state.userReducer.user);
   const dispatch = useDispatch();
   const { id } = useParams();
+  const history = useHistory();
 
   if (!boardGame) {
     fetch(`http://localhost:3000/api/v1/boardgames/${id}`)
@@ -128,11 +129,29 @@ function BoardGameShow() {
           return null;
         }
         dispatch({ type: "addToOwnedGames", payload: gameOwnerInfo });
+        history.push(`/users/${user.id}`)
       });
   }
 
   if (parseInt(boardGame.id) !== parseInt(id)) {
     dispatch({ type: "setSelectedBoardGameFromIdOnly", payload: id });
+  }
+
+  if(!boardGame.reviews){
+    if(!boardGame.reviews[0]){
+      return null 
+    }
+    return null 
+  }
+
+  if(!user){
+    return null 
+  }
+  
+  if(!localStorage.token) {
+    return (
+      <h2>Please Log In or Sign Up</h2>
+    )
   }
 
   return (
@@ -169,7 +188,7 @@ function BoardGameShow() {
                       Replayability Score: {review.replayability}
                     </StyledPReview>
                     <StyledPReview>
-                      First Time Difficulty Rating:{" "}
+                      First Time Difficulty Rating: 
                       {review.first_time_difficulty}
                     </StyledPReview>
                     {parseInt(review.user_id) === parseInt(user.id) ? (

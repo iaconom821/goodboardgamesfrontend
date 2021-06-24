@@ -43,7 +43,6 @@ function Nav() {
       <StyledLink
         to="/login"
         onClick={() => {
-          localStorage.clear()
           dispatch({type: "logout"});
         }}
       >

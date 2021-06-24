@@ -119,7 +119,7 @@ function NewBoardGame() {
             .then((boardGameList) => {
               dispatch({ type: "setBoardGames", payload: boardGameList });
               history.push(
-                `/boardgames/${boardGameList[boardGameList.length - 1].id}`
+                `/boardgames/${newBoardGame.id}`
               );
             });
         } else {

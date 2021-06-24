@@ -51,15 +51,15 @@ function BoardGameList() {
         onClick={() => dispatch({ type: "setSelectedBoardGame", payload: boardGame })}
         key={boardGame.id}
       >
-        <Card  style={{ width: "15vw", margin: "8px" }}>
-          <div style={{ width: "15vw", height: "20vw" }}>
+        <Card  style={{ width: "20vw", margin: "8px" }}>
+          <div style={{ width: "20vw", height: "25vw" }}>
             <Card.Img
               style={{ maxWidth: "100%", maxHeight: "90%", borderRadius: "25%" }}
               src={`${boardGame.image}`}
             />
           </div>
           <Card.Body>
-            <div style={{ height: "7vw" }}>
+            <div style={{ height: "fit-content" }}>
               <Card.Title style={{ fontSize: ".8rem", color: "#344A53" }}>
                 {boardGame.title}
               </Card.Title>

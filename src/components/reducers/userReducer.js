@@ -31,17 +31,18 @@ let userReducer = (state = initialState, action) => {
     case "addToOwnedGames":
         return {
             ...state,
-            user: action.payload.user,
+            user: action.payload,
             users: state.users.map(user => {
-                if(user.id === action.payload.user.id){
-                    return action.payload.user
+                if(user.id === action.payload.id){
+                    return action.payload
                 } else {
                     return user 
                 }
             }),
-            selectedUser: action.payload.user 
+            selectedUser: action.payload
         }
     case "logout":
+      localStorage.clear() 
       return {
         ...state, ...initialState
       };
